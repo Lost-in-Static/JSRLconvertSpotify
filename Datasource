@@ -1,0 +1,35 @@
+const rawdata = {
+    "poisonfm": [
+        "All that Remains - Indictent"
+    ]
+}
+
+//------
+
+const song = {
+    id: 1,
+    song: "Wonderwall",
+    artist: "AquelesGajos",
+    spotifyURI: "URL",
+    stationname: ["poisonfm", "songs to cry"]
+}
+
+const song2 = {
+    id: 2,
+    song: "Meninas da Ribeira do sado",
+    artist: "Adiafa",
+    spotifyURI: "URL",
+    stationname: ["AlentejoFM", "songs to cry"]
+}
+
+const stationname = {
+    stationname: "AlentejoFM"
+    playlistURI: "Url"
+}
+
+const data = new Map();
+data.set("Wonderwall", song)
+data.set("Meninas da Ribeira do sado", song2)
+
+
+data.get("Meninas da Ribeira do sado")
