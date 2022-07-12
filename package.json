@@ -4,6 +4,7 @@
   "description": "The objective is to convert the JetSetRadio.live playlists to Spotify",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
