@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Lost-in-Static/JSRLconvertSpotify/issues"
   },
-  "homepage": "https://github.com/Lost-in-Static/JSRLconvertSpotify#readme"
+  "homepage": "https://github.com/Lost-in-Static/JSRLconvertSpotify#readme",
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
 }
