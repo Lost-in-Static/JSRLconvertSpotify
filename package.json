@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Lost-in-Static/JSRLconvertSpotify#readme",
   "dependencies": {
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "express": "^4.18.1"
   }
 }
