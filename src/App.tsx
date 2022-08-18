@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js';
+import { Component, createSignal } from 'solid-js';
 
 import logo from './logo.svg';
 import styles from './App.module.css';
@@ -17,11 +17,19 @@ const App: Component = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn Solid
+          How about no
         </a>
+        <Button />
       </header>
     </div>
   );
 };
+
+const Button: Component = () => {
+  const [count, setCount] =  createSignal(0)
+  return(
+    <button type="button">Don't click here</button> 
+  );
+}; 
 
 export default App;
