@@ -3,7 +3,7 @@ import { Component } from "solid-js";
 export const Login: Component = () => {
   const client_id = "f479df5a46a643148e2ea67ba8d66afd"
   const base_url = "https://accounts.spotify.com";
-  const scope = "user-read-private user-read-email";
+  const scope = "user-read-private user-read-email playlist-modify-public playlist-modify-private";
   const redirect_uri = "http://localhost:3000/callback";
   const state = "poggers";
 

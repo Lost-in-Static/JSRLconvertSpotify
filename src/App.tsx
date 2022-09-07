@@ -13,12 +13,14 @@ const App: Component = () => {
     <Router>
       <div class={styles.App}>
         <Header />
-        <Routes>
-          <Route path="/search" component={Search} />
-          <Route path="/playlists" component={Playlists} />
-          <Route path="/callback" component={Callback} />
-          <Route path="/" component={Login} />
-        </Routes>
+        <main>
+          <Routes>
+            <Route path="/search" component={Search} />
+            <Route path="/playlists" component={Playlists} />
+            <Route path="/callback" component={Callback} />
+            <Route path="/" component={Login} />
+          </Routes>
+        </main>
       </div>
     </Router>
   );
