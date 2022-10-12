@@ -21,5 +21,5 @@ export const Callback: Component = () => {
   const authParameters = parseHashFragments(location.hash);
   localStorage.setItem("access_token", authParameters.access_token);
 
-  return <Navigate href="/playlists" />;
+  return <Navigate href="/" />;
 };

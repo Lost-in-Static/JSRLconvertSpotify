@@ -4,3 +4,8 @@
     align-items: center;
     gap: 8px;
 }
+
+.searchBarHeader {
+    display: flex;
+    gap: 8px;
+}

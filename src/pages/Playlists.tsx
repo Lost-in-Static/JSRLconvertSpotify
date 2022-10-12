@@ -1,20 +1,12 @@
 import { Component, createSignal, For } from "solid-js";
-import axios from "axios";
+import { getPlaylists } from "../services/spotify-service";
 
 export const Playlists: Component = () => {
   const [playlists, setPlaylists] = createSignal<any[]>([]);
-  const token = localStorage.getItem("access_token");
 
-  axios
-    .get("https://api.spotify.com/v1/me/playlists", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then((response) => {
-      setPlaylists(response.data.items);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
+  getPlaylists().then((items) => {
+    setPlaylists(items);
+  });
 
   return (
     <div>

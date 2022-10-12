@@ -1,39 +1,42 @@
-import { Component, createEffect, createSignal, For } from "solid-js";
-import axios from "axios";
+import { Component, createRenderEffect, createSignal, For } from "solid-js";
+import type { JSX } from "solid-js";
 import styles from "./Search.module.css";
+import {
+  addTrackToPlaylist,
+  createPlaylist,
+  getPlaylists,
+  searchTracks,
+} from "../services/spotify-service";
 
 export const Search: Component = () => {
-  const token = localStorage.getItem("access_token");
   const [searchResults, setSearchResults] = createSignal<any[]>([]);
   const [searchQuery, setSearchQuery] = createSignal("");
+  const [selectedPlaylistId, setSelectedPlaylistId] = createSignal("");
+  const [playlists, setPlaylists] = createSignal<any[]>([]);
 
-  const request = axios.create({
-    baseURL: "https://api.spotify.com/v1",
-    headers: { Authorization: `Bearer ${token}` },
+  createRenderEffect(() => {
+    getPlaylists().then((items) => {
+      if (items.length > 0) {
+        setSelectedPlaylistId(items[0].id);
+      }
+
+      setPlaylists(items);
+    });
   });
 
   const handleSearch = () => {
-    request
-      .get(`/search?q=${searchQuery()}&type=track&limit=5`)
-      .then((response) => {
-        setSearchResults(response.data.tracks.items);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    searchTracks(searchQuery()).then((items) => {
+      setSearchResults(items);
+    });
   };
 
-  const handleAddToPlaylist = () => {
-    const PLAYLIST_ID = "3ZZGLlczbDq0BJfgIJsxci";
+  const handleAddToPlaylist = (track: { uri: string }) => {
     const results = searchResults();
     if (results.length == 0) {
       return;
     }
 
-    request
-      .post(`/playlists/${PLAYLIST_ID}/tracks`, {
-        uris: [results[0].uri],
-      })
+    addTrackToPlaylist(selectedPlaylistId(), [track.uri])
       .then(() => {
         console.log("Track added to playlist");
       })
@@ -42,20 +45,38 @@ export const Search: Component = () => {
       });
   };
 
+  const handlePlaylistChange: JSX.EventHandler<HTMLSelectElement, Event> = (
+    event
+  ) => {
+    setSelectedPlaylistId(event.currentTarget.value);
+  };
+
   return (
     <div class={styles.searchBar}>
-      <input
-        onChange={(event) => setSearchQuery(event.currentTarget.value)}
-        type="text"
-      />
-      <button onClick={handleSearch}>Click me to search!</button>
-      <button onClick={handleAddToPlaylist}>Add song to playlist</button>
+      <div class={styles.searchBarHeader}>
+        <label>Select Playlist</label>
+        <select value={selectedPlaylistId()} onChange={handlePlaylistChange}>
+          <For each={playlists()}>
+            {(item: any) => <option value={item.id}>{item.name}</option>}
+          </For>
+        </select>
+        <input
+          onChange={(event) => setSearchQuery(event.currentTarget.value)}
+          type="text"
+        />
+        <button onClick={handleSearch}>Click me to search!</button>
+      </div>
       <ul>
         <For each={searchResults()}>
           {(track: any) => (
-            <li>{`${track.name} - ${track.uri} - ${track.artists
-              .map((artist: any) => artist.name)
-              .join(", ")}`}</li>
+            <li>
+              <span>{`${track.name} - ${track.uri} - ${track.artists
+                .map((artist: any) => artist.name)
+                .join(", ")} `}</span>
+              <button onClick={() => handleAddToPlaylist(track)}>
+                Add song to playlist
+              </button>
+            </li>
           )}
         </For>
       </ul>
