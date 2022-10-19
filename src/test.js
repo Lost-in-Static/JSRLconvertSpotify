@@ -1,3 +1,4 @@
+const fs = require("fs");
 const axios = require("axios");
 const baseUrl = "https://www.jetsetradio.live";
 
@@ -11,18 +12,22 @@ async function main() {
 
   const srcRegExp = new RegExp(/src="(.*)"/);
   const sanitizedRows = scriptRadioRows.map((row) => srcRegExp.exec(row)[1]);
-//   const radioUris = sanitizedRows.map((radio) => `${baseUrl}/${radio}`);
-  const radios = sanitizedRows.map(radio => {
-    const name = radio.split("/")[2]
+  const radios = sanitizedRows.map((radio) => {
+    const name = radio.split("/")[2];
 
     return {
-        name,
-        uri: `${baseUrl}/${radio}`
-    }
-  })
+      name,
+      uri: `${baseUrl}/${radio}`,
+    };
+  });
 
+  let playlistMap = {};
   await Promise.all(
     radios.map(async (radio) => {
+      if (radio.name === "bumps") {
+        return;
+      }
+
       const radioResponse = await axios.get(radio.uri);
       const radioRows = radioResponse.data.split("\n");
       const tracksStartIndex =
@@ -38,8 +43,13 @@ async function main() {
 
         return filteredTracks;
       }, []);
-      console.log(tracks);
+
+      playlistMap[radio.name] = tracks;
+
+      return;
     })
   );
+
+  fs.writeFileSync("scrapperdb.json", JSON.stringify(playlistMap, null, 2));
 }
 main();
