@@ -1,8 +1,7 @@
-const fs = require("fs");
 const axios = require("axios");
 const baseUrl = "https://www.jetsetradio.live";
 
-async function main() {
+async function extractTracks() {
   const response = await axios.get(baseUrl);
 
   const rows = response.data.split("\n");
@@ -38,7 +37,10 @@ async function main() {
         const isTrack = trackRegExp.test(row);
         if (isTrack === true) {
           const track = trackRegExp.exec(row)[1];
-          filteredTracks.push(track);
+          filteredTracks.push({
+            fullName: track,
+            uri: undefined
+          });
         }
 
         return filteredTracks;
@@ -49,7 +51,8 @@ async function main() {
       return;
     })
   );
-
-  fs.writeFileSync("scrapperdb.json", JSON.stringify(playlistMap, null, 2));
+  return playlistMap
 }
-main();
+module.exports = {
+  extractTracks,
+};
