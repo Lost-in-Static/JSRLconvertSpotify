@@ -1,17 +1,6 @@
 const axios = require("axios");
-const {CLIENTID , CLIENTSECRET} = require ("secret.js")
-
-test = {
-  playlist: [
-    {
-      fullName: "Rob Zombie - Trade In Your Guns For A Coffin",
-    }
-  ],
-  testpl: [
-    { fullName: "Deftones - When Girls Telephone Boys" },
-    { fullName: "Disturbed - God Of The Mind" },
-  ],
-};
+const CLIENTID = process.env.SPOTIFYAPI_APP_CLIENTID;
+const CLIENTSECRET = process.env.SPOTIFYAPI_APP_SECRET;
 
 async function authenticate() {
   const params = new URLSearchParams({ grant_type: "client_credentials" });
