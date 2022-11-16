@@ -1,7 +1,8 @@
 /* Load the HTTP library */
 const http = require("http");
 const axios = require("axios").default; // "Axios" library
-const { CLIENTID, CLIENTSECRET } = require("../secrets.js");
+const CLIENTID = process.env.SPOTIFYAPI_APP_CLIENTID;
+const CLIENTSECRET = process.env.SPOTIFYAPI_APP_SECRET;
 
 /* Create an HTTP server to handle responses */
 

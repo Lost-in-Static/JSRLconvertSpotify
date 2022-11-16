@@ -16,7 +16,8 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "db": "docker exec -it db mysql -uroot -ppassword db"
   },
   "devDependencies": {
     "typescript": "^4.7.4",
@@ -26,6 +27,7 @@
   "dependencies": {
     "@solidjs/router": "^0.4.2",
     "axios": "^0.27.2",
+    "mysql-await": "^2.2.2",
     "solid-js": "^1.4.7"
   }
 }
