@@ -14,10 +14,14 @@
   "homepage": "https://github.com/Lost-in-Static/JSRLconvertSpotify#readme",
   "scripts": {
     "start": "vite",
+    "start:db": "docker compose up -d",
+    "scrape": "node scrapper",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "db": "docker exec -it db mysql -uroot -ppassword db"
+    "db": "docker exec -it db mysql -uroot -ppassword db",
+    "migrate:up": "npx db-migrate up",
+    "migrate:down": "npx db-migrate down"
   },
   "devDependencies": {
     "db-migrate": "^0.11.13",

@@ -16,12 +16,12 @@ exports.setup = function (options, seedLink) {
 
 exports.up = function (db) {
   db.createTable("playlists", {
-    id: { type: "int", primaryKey: true },
+    id: { type: "int", primaryKey: true, autoIncrement: true },
     name: "string",
   });
 
   db.createTable("tracks", {
-    id: { type: "int", primaryKey: true },
+    id: { type: "int", primaryKey: true, autoIncrement: true },
     name: "string",
     artist: "string",
     uri: "string",

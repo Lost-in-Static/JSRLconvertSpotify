@@ -1,10 +1,10 @@
 {
-    "dev": {
-      "driver": "mysql",
-      "user": "root",
-      "password": "password",
-      "host": "localhost",
-      "database": "db",
-      "port": "3306"
-    }
+  "dev": {
+    "driver": "mysql",
+    "user": "root",
+    "password": "password",
+    "host": "localhost",
+    "database": "db",
+    "port": "3306"
   }
+}
