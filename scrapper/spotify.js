@@ -46,6 +46,17 @@ async function getTracks (client, tracks) {
 async function updateTrackInfo (playlistMap) {
   const client = await authenticate()
 
+  // Planos para Knoch do futuro
+
+  // playlists = await data.getPlaylists()
+  // playlists.forEach(playlist => {
+  //   tracks = await data.getTracks(playlist.id)
+  //   tracks.forEach(track => {
+  //     const updatedTrack = await searchTrack(client, track.name)
+  //     data.updateTrack(track.id, updatedTrack)
+  //   })
+  // })
+
   for (const key in playlistMap) {
     playlistMap[key] = await getTracks(client, playlistMap[key])
   }

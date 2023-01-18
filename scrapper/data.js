@@ -9,7 +9,7 @@ dbClient.on('error', (err) => {
 
 // Get all playlists > Show playlist > Get all tracks from Playlist > Get track > Send to spotify > Update track with new data > Rinse & Repeat
 // Known info from SQL > Table names Tracks & Playlists
-// SELECT * from PLAYLISTS > SELECT * from TRACKS WHERE playlistId = <ID> > UPDATE TRACKS SET spotifyUrl = x WHERE trackId = <ID>
+// SELECT * FROM playlists > SELECT * FROM tracks WHERE playlistId = <ID> > UPDATE tracks SET spotifyUrl = x WHERE trackId = <ID>
 
 const addEverything = async (playlistMap) => {
   for (const key in playlistMap) {
@@ -24,7 +24,7 @@ const addEverything = async (playlistMap) => {
 
     const tracks = playlistMap[key]
     for (const track of tracks) {
-      const response = await dbClient.awaitQuery(
+      await dbClient.awaitQuery(
         'INSERT INTO tracks (name, playlistid) VALUES (?)',
         [[track.fullName, playlistId]]
       )
@@ -52,5 +52,6 @@ const getPlaylists = async () => {
 
 module.exports = {
   addEverything,
-  getPlaylists
+  getPlaylists,
+  updateTracks
 }
