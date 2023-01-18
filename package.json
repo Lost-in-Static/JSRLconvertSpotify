@@ -26,6 +26,11 @@
   "devDependencies": {
     "db-migrate": "^0.11.13",
     "db-migrate-mysql": "^2.2.0",
+    "eslint": "^8.31.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
     "typescript": "^4.7.4",
     "vite": "^3.0.0",
     "vite-plugin-solid": "^2.3.0"

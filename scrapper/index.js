@@ -1,19 +1,45 @@
-const { extractTracks } = require("./extract-data.js");
-const { spotify } = require("./spotify.js");
-const { addEverything } = require("./data.js");
+const { extractTracks } = require('./extract-data.js')
+const { updateTrackInfo } = require('./spotify.js')
+const { addEverything, getPlaylists } = require('./data.js')
+const fs = require('fs')
 
-async function main() {
+async function main () {
   // const playlistMap = await extractTracks();
-  const playlistMap = {
-    "playlist 1": [],
-    "playlist 2": [],
-    "playlist 3": [],
-    "playlist 4": [],
-    "playlist 5": [],
-  };
+  // await addEverything(playlistMap);
 
   // await spotify(playlistMap);
 
-  await addEverything(playlistMap);
+  // fs.writeFileSync(
+  //   "scrapperdb.json",
+  //   JSON.stringify(playlistMap, null, 2),
+  //   "utf8"
+  // );
+  // const playlistMap = JSON.parse(fs.readFileSync('scrapperdb.json', 'utf8'))
+
+  // await addEverything(playlistMap)
+  // await getPlaylists()
+  await updateTrackInfo({
+    poggers: [
+      {
+        name: 'Reverie',
+        artist: 'Polyphia'
+      },
+      {
+        name: 'Knife party',
+        artist: 'Deftones'
+      },
+      {
+        name: 'Digital Bath',
+        artist: 'Deftones'
+      }
+    ],
+    notPog: [
+      {
+        name: 'Baby',
+        artist: 'Justice Beaver'
+      }
+    ]
+  })
 }
-main();
+
+main()

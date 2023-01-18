@@ -1,58 +1,63 @@
-const axios = require("axios");
-const baseUrl = "https://www.jetsetradio.live";
+const axios = require('axios')
+const baseUrl = 'https://www.jetsetradio.live'
 
-async function extractTracks() {
-  const response = await axios.get(baseUrl);
+function splitNameArtist (track) {
+  const [artist, ...nameFragments] = track.split(' - ')
+  return { artist, track: nameFragments.join(' - ') }
+}
 
-  const rows = response.data.split("\n");
+async function extractTracks () {
+  const response = await axios.get(baseUrl)
+
+  const rows = response.data.split('\n')
   const scriptRadioRows = rows.filter((row) =>
     row.startsWith('<script src="radio/stations/')
-  );
+  )
 
-  const srcRegExp = new RegExp(/src="(.*)"/);
-  const sanitizedRows = scriptRadioRows.map((row) => srcRegExp.exec(row)[1]);
+  const srcRegExp = /src="(.*)"/
+  const sanitizedRows = scriptRadioRows.map((row) => srcRegExp.exec(row)[1])
   const radios = sanitizedRows.map((radio) => {
-    const name = radio.split("/")[2];
+    const name = radio.split('/')[2]
 
     return {
       name,
-      uri: `${baseUrl}/${radio}`,
-    };
-  });
+      uri: `${baseUrl}/${radio}`
+    }
+  })
 
-  let playlistMap = {};
+  const playlistMap = {}
   await Promise.all(
     radios.map(async (radio) => {
-      if (radio.name === "bumps") {
-        return;
+      if (radio.name === 'bumps') {
+        return
       }
 
-      const radioResponse = await axios.get(radio.uri);
-      const radioRows = radioResponse.data.split("\n");
+      const radioResponse = await axios.get(radio.uri)
+      const radioRows = radioResponse.data.split('\n')
       const tracksStartIndex =
-        radioRows.findIndex((row) => row.startsWith("//TRACKS")) + 1;
-      const allTracks = radioRows.slice(tracksStartIndex);
-      const trackRegExp = new RegExp(/=\s"(.*)"/);
+        radioRows.findIndex((row) => row.startsWith('//TRACKS')) + 1
+      const allTracks = radioRows.slice(tracksStartIndex)
+      const trackRegExp = /=\s"(.*)"/
       const tracks = allTracks.reduce((filteredTracks, row) => {
-        const isTrack = trackRegExp.test(row);
-        if (isTrack === true) {
-          const track = trackRegExp.exec(row)[1];
+        const isTrack = trackRegExp.test(row)
+        if (isTrack) {
+          const trackAndArtist = trackRegExp.exec(row)[1]
+          const { artist, track } = splitNameArtist(trackAndArtist)
           filteredTracks.push({
-            fullName: track,
-            uri: undefined
-          });
+            name: track,
+            artist
+          })
         }
 
-        return filteredTracks;
-      }, []);
+        return filteredTracks
+      }, [])
 
-      playlistMap[radio.name] = tracks;
-
-      return;
+      playlistMap[radio.name] = tracks
     })
-  );
+  )
   return playlistMap
 }
 module.exports = {
   extractTracks,
-};
+  splitNameArtist
+}

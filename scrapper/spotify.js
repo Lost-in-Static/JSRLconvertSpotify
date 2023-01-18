@@ -1,58 +1,57 @@
-const axios = require("axios");
-const CLIENTID = process.env.SPOTIFYAPI_APP_CLIENTID;
-const CLIENTSECRET = process.env.SPOTIFYAPI_APP_SECRET;
+const axios = require('axios')
+const CLIENTID = process.env.SPOTIFYAPI_APP_CLIENTID
+const CLIENTSECRET = process.env.SPOTIFYAPI_APP_SECRET
 
-async function authenticate() {
-  const params = new URLSearchParams({ grant_type: "client_credentials" });
+async function authenticate () {
+  const params = new URLSearchParams({ grant_type: 'client_credentials' })
 
   const { data } = await axios.post(
-    "https://accounts.spotify.com/api/token",
+    'https://accounts.spotify.com/api/token',
     params,
     {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
         Authorization:
-          "Basic " +
-          Buffer.from(`${CLIENTID}:${CLIENTSECRET}`).toString("base64"),
-      },
+          'Basic ' +
+          Buffer.from(`${CLIENTID}:${CLIENTSECRET}`).toString('base64')
+      }
     }
-  );
+  )
 
   return axios.create({
-    baseURL: "https://api.spotify.com/v1",
-    headers: { Authorization: `Bearer ${data.access_token}` },
-  });
+    baseURL: 'https://api.spotify.com/v1',
+    headers: { Authorization: `Bearer ${data.access_token}` }
+  })
 }
 
-async function searchTrack(client, searchQuery) {
+async function searchTrack (client, searchQuery) {
   const result = await client.get(
     `/search?q=${searchQuery}&type=track&limit=1`
-  );
-  console.log("search");
-  console.log(result.data.tracks);
-  return result.data.tracks;
+  )
+  return result.data.tracks.items[0]
 }
 
-async function getTracks(client) {
-  for (key in test) {
-    const playlistTracks = test[key];
-    playlistTracks.forEach(async (track) => {
-      const trackName = track.fullName;
-      console.log(trackName);
-      const uri = await searchTrack(client, trackName);
-      console.log(uri.items[0].uri);
-    });
+async function getTracks (client, tracks) {
+  const newTracks = []
+  for (const track of tracks) {
+    const { artists, uri } = await searchTrack(client, track.name)
+    newTracks.push({
+      ...track,
+      spotify: { artists, uri }
+    })
   }
+  return newTracks
 }
 
-async function spotify(playlistMap) {
-  const client = await authenticate();
-  console.log(await getTracks(client));
+async function updateTrackInfo (playlistMap) {
+  const client = await authenticate()
 
-  //   for (key in playlistMap) {
-  // playlistMap[key] = getTracks(client, playlistMap[key])
-  //   }
+  for (const key in playlistMap) {
+    playlistMap[key] = await getTracks(client, playlistMap[key])
+  }
+  console.log(playlistMap)
 }
+
 module.exports = {
-  spotify,
-};
+  updateTrackInfo
+}
