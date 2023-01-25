@@ -43,7 +43,7 @@ async function getTracks (client, tracks) {
   return newTracks
 }
 
-async function updateTrackInfo (playlistMap) {
+async function updateTrackInfo (tracks) {
   const client = await authenticate()
 
   // Planos para Knoch do futuro
@@ -57,10 +57,12 @@ async function updateTrackInfo (playlistMap) {
   //   })
   // })
 
-  for (const key in playlistMap) {
-    playlistMap[key] = await getTracks(client, playlistMap[key])
-  }
-  console.log(playlistMap)
+  // for (const track of tracks) {
+  //   track = await getTracks(client, tracks)
+  // }
+  // console.log(track)
+
+  await getTracks(client, tracks)
 }
 
 module.exports = {

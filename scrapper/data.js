@@ -12,25 +12,31 @@ dbClient.on('error', (err) => {
 // SELECT * FROM playlists > SELECT * FROM tracks WHERE playlistId = <ID> > UPDATE tracks SET spotifyUrl = x WHERE trackId = <ID>
 
 const addEverything = async (playlistMap) => {
+  const entities = []
+
   for (const key in playlistMap) {
     const { insertId: playlistId } = await dbClient.awaitQuery(
       'INSERT INTO playlists (name) VALUES (?)',
       [key]
     )
 
-    console.log(playlistId)
-
-    // INSERT INTO tracks (name, artist, uri, playlistid) VALUES ("wellermen", "longjohns","spotify:138y7tgijag", "26");
-
     const tracks = playlistMap[key]
     for (const track of tracks) {
-      await dbClient.awaitQuery(
-        'INSERT INTO tracks (name, playlistid) VALUES (?)',
-        [[track.fullName, playlistId]]
+      const { insertId: trackId } = await dbClient.awaitQuery(
+        'INSERT INTO tracks (name, artist, playlistid) VALUES (?)',
+        [[track.name, track.artist, playlistId]]
       )
+      entities.push({
+        ...track,
+        playlistId,
+        id: trackId
+      })
     }
   }
+
   dbClient.awaitEnd()
+
+  return entities
 }
 
 const getPlaylists = async () => {
