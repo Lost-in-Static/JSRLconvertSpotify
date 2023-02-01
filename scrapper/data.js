@@ -41,19 +41,6 @@ const getPlaylists = async () => {
   return await dbClient.awaitQuery('SELECT * FROM playlists')
 }
 
-// const getTracksFromPlaylists = async (playlists) => {
-//   const playlistName =
-//   const tracks = await dbClient.awaitQuery(
-//     'SELECT * from TRACKS where playlistID = (?)',
-//     playlistName
-//   )
-//   return tracks
-// }
-
-// const updateTracks = async () => {
-//   const updateTracks = await dbClient.awaitQuery('UPDATE TRACKS SET spotifyUrl = (?) WHERE trackId = (?)')
-// }
-
 const setDbTrackUri = async (tracks) => {
   for (const track of tracks) {
     const result = await dbClient.awaitQuery('UPDATE tracks SET uri = ? WHERE id = ?',
