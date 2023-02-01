@@ -57,7 +57,7 @@ const getPlaylists = async () => {
 const setDbTrackUri = async (tracks) => {
   for (const track of tracks) {
     const result = await dbClient.awaitQuery('UPDATE tracks SET uri = ? WHERE id = ?',
-      [track.uri, track.id])
+      [track.spotify.uri, track.id])
     console.log(result)
   }
 }

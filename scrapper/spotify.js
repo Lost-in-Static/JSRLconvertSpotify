@@ -38,8 +38,7 @@ async function getSpotifyTrackInfo (tracks) {
     const { artists, uri } = await searchTrack(client, track.name)
     newTracks.push({
       ...track,
-      spotifyArtists: artists,
-      uri
+      spotify: { artists, uri }
     })
   }
   return newTracks
