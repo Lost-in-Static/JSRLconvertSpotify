@@ -31,40 +31,20 @@ async function searchTrack (client, searchQuery) {
   return result.data.tracks.items[0]
 }
 
-async function getTracks (client, tracks) {
+async function getSpotifyTrackInfo (tracks) {
+  const client = await authenticate()
   const newTracks = []
   for (const track of tracks) {
     const { artists, uri } = await searchTrack(client, track.name)
     newTracks.push({
       ...track,
-      spotify: { artists, uri }
+      spotifyArtists: artists,
+      uri
     })
   }
   return newTracks
 }
 
-async function updateTrackInfo (tracks) {
-  const client = await authenticate()
-
-  // Planos para Knoch do futuro
-
-  // playlists = await data.getPlaylists()
-  // playlists.forEach(playlist => {
-  //   tracks = await data.getTracks(playlist.id)
-  //   tracks.forEach(track => {
-  //     const updatedTrack = await searchTrack(client, track.name)
-  //     data.updateTrack(track.id, updatedTrack)
-  //   })
-  // })
-
-  // for (const track of tracks) {
-  //   track = await getTracks(client, tracks)
-  // }
-  // console.log(track)
-
-  await getTracks(client, tracks)
-}
-
 module.exports = {
-  updateTrackInfo
+  getSpotifyTrackInfo
 }

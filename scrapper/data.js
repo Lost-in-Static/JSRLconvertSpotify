@@ -34,8 +34,6 @@ const addEverything = async (playlistMap) => {
     }
   }
 
-  dbClient.awaitEnd()
-
   return entities
 }
 
@@ -56,8 +54,21 @@ const getPlaylists = async () => {
 //   const updateTracks = await dbClient.awaitQuery('UPDATE TRACKS SET spotifyUrl = (?) WHERE trackId = (?)')
 // }
 
+const setDbTrackUri = async (tracks) => {
+  for (const track of tracks) {
+    const result = await dbClient.awaitQuery('UPDATE tracks SET uri = ? WHERE id = ?',
+      [track.uri, track.id])
+    console.log(result)
+  }
+}
+
+const endConnection = async () => {
+  await dbClient.awaitEnd()
+}
+
 module.exports = {
   addEverything,
   getPlaylists,
-  updateTracks
+  setDbTrackUri,
+  endConnection
 }

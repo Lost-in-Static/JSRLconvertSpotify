@@ -1,6 +1,6 @@
 const { extractTracks } = require('./extract-data.js')
-const { updateTrackInfo } = require('./spotify.js')
-const { addEverything, getPlaylists } = require('./data.js')
+const { getSpotifyTrackInfo } = require('./spotify.js')
+const { setDbTrackUri, addEverything, endConnection } = require('./data.js')
 const fs = require('fs')
 
 async function main () {
@@ -16,10 +16,9 @@ async function main () {
   // );
   // const playlistMap = JSON.parse(fs.readFileSync('scrapperdb.json', 'utf8'))
 
-  // await addEverything(playlistMap)
   // await getPlaylists()
-  await updateTrackInfo({
-    poggers: [
+  const playlistMap = {
+    rockRadio: [
       {
         name: 'Reverie',
         artist: 'Polyphia'
@@ -27,19 +26,25 @@ async function main () {
       {
         name: 'Knife party',
         artist: 'Deftones'
-      },
+      }
+    ],
+    nonPoggy: [
       {
         name: 'Digital Bath',
         artist: 'Deftones'
-      }
-    ],
-    notPog: [
+      },
       {
         name: 'Baby',
         artist: 'Justice Beaver'
       }
     ]
-  })
+  }
+
+  const rawTracks = await addEverything(playlistMap)
+  const curatedTracks = await getSpotifyTrackInfo(rawTracks)
+  await setDbTrackUri(curatedTracks)
+
+  await endConnection()
 }
 
 main()
