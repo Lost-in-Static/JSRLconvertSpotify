@@ -3,21 +3,17 @@ const { addEverything, endConnection } = require('./data.js')
 const fs = require('fs')
 
 async function main () {
-  const playlistMap = await extractTracks()
+  // const playlistMap = await extractTracks()
+  // console.log('extract complete')
 
-  fs.writeFileSync('scrapperdbFuture.json', JSON.stringify(playlistMap, null, 2))
-  // const playlistMap = JSON.parse(fs.readFileSync('scrapperdb.json', 'utf8'))
+  // fs.writeFileSync('scrapperdbFuture.json', JSON.stringify(playlistMap, null, 2))
+  const playlistMap = JSON.parse(fs.readFileSync('scrapperdbJSRL.json', 'utf8'))
 
-  console.log('extract complete')
-
-  // console.log('Adding scrapped to SQL -- Start')
-  // const rawTracks = await addEverything(playlistMap)
-  // console.log('added raw to SQL -- Starting Spotify Calls')
-  // const curatedTracks = await getSpotifyTrackInfo(rawTracks)
-  // console.log('finished Spotify -- Starting DB update')
-  // await setDbTrackUri(curatedTracks)
-  // console.log('finished everything')
-  // await endConnection()
+  console.log('Starting')
+  console.log('Adding scrapped information to SQL & Searching URI with SPOTIFY API')
+  const rawTracks = await addEverything(playlistMap)
+  console.log('Finished adding information to DB')
+  await endConnection()
 }
 
 main()
