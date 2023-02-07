@@ -1,51 +1,53 @@
-"use strict";
+'use strict'
 
-var dbm;
-var type;
-var seed;
+let dbm
+let type
+let seed
 
 /**
  * We receive the dbmigrate dependency from dbmigrate initially.
  * This enables us to not have to rely on NODE_PATH.
  */
 exports.setup = function (options, seedLink) {
-  dbm = options.dbmigrate;
-  type = dbm.dataType;
-  seed = seedLink;
-};
+  dbm = options.dbmigrate
+  type = dbm.dataType
+  seed = seedLink
+}
 
 exports.up = function (db) {
-  db.createTable("playlists", {
-    id: { type: "int", primaryKey: true, autoIncrement: true },
-    name: "string",
-  });
+  db.runSql('ALTER DATABASE db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;')
 
-  db.createTable("tracks", {
-    id: { type: "int", primaryKey: true, autoIncrement: true },
-    name: "string",
-    artist: "string",
-    uri: "string",
+  db.createTable('playlists', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
+    name: 'string'
+  })
+
+  db.createTable('tracks', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
+    name: 'string',
+    artist: 'string',
+    uri: 'string',
     playlistid: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "tracks_playlistid_playlists_id_fk",
-        table: "playlists",
+        name: 'tracks_playlistid_playlists_id_fk',
+        table: 'playlists',
         rules: {},
-        mapping: "id",
-      },
-    },
-  });
+        mapping: 'id'
+      }
+    }
+  })
 
-  return null;
-};
+  return null
+}
 
 exports.down = function (db) {
-  db.dropTable("tracks");
-  db.dropTable("playlists");
+  db.dropTable('tracks')
+  db.dropTable('playlists')
 
-  return null;
-};
+  return null
+}
 
 exports._meta = {
-  version: 1,
-};
+  version: 1
+}

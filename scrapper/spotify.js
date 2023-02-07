@@ -24,29 +24,39 @@ async function authenticate () {
   })
 }
 
-async function searchTrack (client, searchQuery) {
-  const result = await client.get(
-    `/search?q=${searchQuery}&type=track&limit=1`
-  )
-  return result.data.tracks.items[0]
+async function searchTrack (searchQuery) {
+  const client = await authenticate()
+  try {
+    const result = await client.get(encodeURI(`/search?q=${searchQuery}&type=track&limit=1`))
+
+    const track = result?.data?.tracks?.items[0]
+
+    if (!track) {
+      throw new Error(`No tracks found for "${searchQuery}"`)
+    }
+    return track
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-async function getSpotifyTrackInfo (tracks) {
-  const client = await authenticate()
-  const newTracks = []
-  for (const track of tracks) {
-    try {
-      const { uri } = await searchTrack(client, track.name)
-      newTracks.push({
-        ...track,
-        spotify: { uri }
-      })
-      console.log(newTracks.at(-1).name)
-    } catch (error) {}
-  }
-  return newTracks
-}
+// async function getSpotifyTrackInfo (tracks) {
+//   const newTracks = []
+//   for (const track of tracks) {
+//     try {
+//       const { uri } = await searchTrack(track.name)
+//       newTracks.push({
+//         ...track,
+//         spotify: { uri }
+//       })
+//     } catch (error) {
+//       console.log(error)
+//       console.log(track.name)
+//     }
+//   }
+//   return newTracks
+// }
 
 module.exports = {
-  getSpotifyTrackInfo
+  searchTrack
 }

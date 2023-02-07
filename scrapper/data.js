@@ -1,5 +1,6 @@
 const fs = require('fs')
 const mysql = require('mysql-await')
+const { searchTrack } = require('./spotify.js')
 
 const dbConfig = JSON.parse(fs.readFileSync('database.json'))
 const dbClient = mysql.createConnection(dbConfig.dev)
@@ -22,14 +23,17 @@ const addEverything = async (playlistMap) => {
 
     const tracks = playlistMap[key]
     for (const track of tracks) {
+      const spotifyInfo = await searchTrack(track.name)
+
       const { insertId: trackId } = await dbClient.awaitQuery(
-        'INSERT INTO tracks (name, artist, playlistid) VALUES (?)',
-        [[track.name, track.artist, playlistId]]
+        'INSERT INTO tracks (name, artist, playlistid, uri) VALUES (?)',
+        [[track.name, track.artist, playlistId, spotifyInfo?.uri]]
       )
       entities.push({
         ...track,
         playlistId,
-        id: trackId
+        id: trackId,
+        uri: spotifyInfo?.uri
       })
     }
   }
