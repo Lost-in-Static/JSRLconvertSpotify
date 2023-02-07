@@ -35,11 +35,14 @@ async function getSpotifyTrackInfo (tracks) {
   const client = await authenticate()
   const newTracks = []
   for (const track of tracks) {
-    const { artists, uri } = await searchTrack(client, track.name)
-    newTracks.push({
-      ...track,
-      spotify: { artists, uri }
-    })
+    try {
+      const { uri } = await searchTrack(client, track.name)
+      newTracks.push({
+        ...track,
+        spotify: { uri }
+      })
+      console.log(newTracks.at(-1).name)
+    } catch (error) {}
   }
   return newTracks
 }
