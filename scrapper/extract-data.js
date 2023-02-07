@@ -1,5 +1,5 @@
 const axios = require('axios')
-const baseUrl = 'https://www.jetsetradio.live'
+const baseUrl = 'https://www.jetsetradiofuture.live'
 
 function splitNameArtist (track) {
   const [artist, ...nameFragments] = track.split(' - ')
@@ -11,8 +11,9 @@ async function extractTracks () {
 
   const rows = response.data.split('\n')
   const scriptRadioRows = rows.filter((row) =>
-    row.startsWith('<script src="radio/stations/')
+    row.includes('<script') && row.includes('src="radio/stations/')
   )
+  console.log(scriptRadioRows)
 
   const srcRegExp = /src="(.*)"/
   const sanitizedRows = scriptRadioRows.map((row) => srcRegExp.exec(row)[1])
