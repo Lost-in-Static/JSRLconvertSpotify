@@ -41,8 +41,14 @@ const addEverything = async (playlistMap) => {
   return entities
 }
 
-const getPlaylists = async () => {
-  return await dbClient.awaitQuery('SELECT * FROM playlists')
+const getTracks = async () => {
+  return await dbClient.awaitQuery(`
+    SELECT
+      t.*,
+      p.name playlistName
+    FROM tracks t
+    INNER JOIN playlists p ON p.id = t.playlistId
+  `)
 }
 
 const setDbTrackUri = async (tracks) => {
@@ -59,7 +65,7 @@ const endConnection = async () => {
 
 module.exports = {
   addEverything,
-  getPlaylists,
   setDbTrackUri,
-  endConnection
+  endConnection,
+  getTracks
 }
