@@ -1,5 +1,6 @@
 const { getTracks } = require('./data.js');
-
+import {writeFileSync} from 'fs';
+ 
 export type Track = {
     name: string
     artist: string
@@ -26,7 +27,7 @@ async function generate() {
         }
 
         if (acc.has(track.playlistName)) {
-            acc.get(track.playlistName).push(mappedTrack)
+            acc.get(track.playlistName)!.push(mappedTrack)
             return acc
         }
 
@@ -34,7 +35,7 @@ async function generate() {
         return acc
     }, new Map())
 
-    console.log(trackData)
+    writeFileSync('src/assets/playlistMap.json', JSON.stringify(Object.fromEntries(trackData), null, 2))
 }
 
 generate()
