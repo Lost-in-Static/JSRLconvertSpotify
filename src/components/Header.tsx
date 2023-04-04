@@ -8,6 +8,7 @@ export const Header: Component = () => {
         <Link href="/">Home</Link>
         <Link href="/playlists">Playlists</Link>
         <Link href="/search">Search</Link>
+        <Link href="/JSRLiveImport">Import JSRL</Link>
     </header>
   );
 };

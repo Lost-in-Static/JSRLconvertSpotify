@@ -4,6 +4,7 @@ import { Header } from "./components/Header";
 import { Login } from "./pages/Login";
 import { Callback } from "./pages/Callback";
 import { Playlists } from "./pages/Playlists";
+import { JSRLiveImport } from "./pages/JSRLiveImport";
 import { Search } from "./pages/Search";
 import logo from "./logo.svg";
 import styles from "./App.module.css";
@@ -17,6 +18,7 @@ const App: Component = () => {
           <Routes>
             <Route path="/search" component={Search} />
             <Route path="/playlists" component={Playlists} />
+            <Route path="/JSRLiveImport" component={JSRLiveImport} />
             <Route path="/callback" component={Callback} />
             <Route path="/" component={Login} />
           </Routes>
