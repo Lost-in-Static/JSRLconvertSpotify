@@ -35,7 +35,7 @@ async function generate() {
         return acc
     }, new Map())
 
-    writeFileSync('src/assets/playlistMap.json', JSON.stringify(Object.fromEntries(trackData), null, 2))
+    writeFileSync('src/playlistMap.json', JSON.stringify(Object.fromEntries(trackData), null, 2))
 }
 
 generate()
