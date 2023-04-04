@@ -1,21 +1,7 @@
 const { getTracks } = require('./data.js');
 import {writeFileSync} from 'fs';
+import {Track} from "../src/types/Map"
  
-export type Track = {
-    name: string
-    artist: string
-    spotifyUri: string
-}
-
-export type Playlist = {
-    name: string
-    tracks: Array<Track>
-}
-
-export type TrackData = {
-    playlists: Array<Playlist>
-}
-
 async function generate() {
     const allTracks: any[] = await getTracks()
 
