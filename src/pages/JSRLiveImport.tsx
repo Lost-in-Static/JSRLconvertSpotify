@@ -49,14 +49,11 @@ export const JSRLiveImport: Component = () => {
               </button>
               <button
                 onClick={async () => {
-                  // const createdPlaylistId = await createPlaylist(playlistName);
-                  // console.log(`Created playlist: ${playlistName} - ${createdPlaylistId} \n Starting import`);
                   const uriArray: string[] = [];
                   const playlist = playlistMap[playlistName];
                   for (const tracks of playlist) {
                     const uri = tracks.spotifyUri;
                     if (uri) {
-                      // tests if URI is null. Will need to fix this on SQL
                       uriArray.push(uri);
                     } else {
                       console.log("No URI for Track: " + tracks.name);
