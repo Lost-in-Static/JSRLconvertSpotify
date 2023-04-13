@@ -1,10 +1,14 @@
 import { Component, createSignal, For } from "solid-js";
-import {PlaylistMap} from "../types/Map"
+import { PlaylistMap, Track } from "../types/Map";
 import JSRLMap from "../playlistMap.json";
+import {
+  addTrackToPlaylist,
+  createPlaylist,
+} from "../services/spotify-service";
 
 export const JSRLiveImport: Component = () => {
-  const playlistMap = JSRLMap as any as PlaylistMap
-  
+  const playlistMap = JSRLMap as any as PlaylistMap;
+
   return (
     <div>
       <ul>
@@ -13,11 +17,28 @@ export const JSRLiveImport: Component = () => {
             <li>
               <span>{playlistName}</span>
               <button
-                onClick={() => {
-                  console.log(playlistMap[playlistName]);
+                onClick={async () => {
+                  const createdPlaylistId = await createPlaylist(playlistName);
+                  console.log(`Created playlist: ${playlistName} - ${createdPlaylistId} \n Starting import`);
+                  const uriArray: string[] = [];
+                  const playlist = playlistMap[playlistName];
+                  for (const tracks of playlist) {
+                    const uri = tracks.spotifyUri;
+                    uriArray.push(uri);
+                  }
+                  console.log("Completed import");
+
+                  addTrackToPlaylist(createdPlaylistId, uriArray);
                 }}
               >
-                Import
+                Import Playlist
+              </button>
+              <button
+                onClick={async () => {
+                  const createdPlaylistId = await createPlaylist(playlistName);
+                }}
+              >
+                Create Playlist
               </button>
             </li>
           )}
