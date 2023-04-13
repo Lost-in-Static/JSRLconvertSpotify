@@ -18,27 +18,62 @@ export const JSRLiveImport: Component = () => {
               <span>{playlistName}</span>
               <button
                 onClick={async () => {
-                  const createdPlaylistId = await createPlaylist(playlistName);
-                  console.log(`Created playlist: ${playlistName} - ${createdPlaylistId} \n Starting import`);
                   const uriArray: string[] = [];
                   const playlist = playlistMap[playlistName];
                   for (const tracks of playlist) {
                     const uri = tracks.spotifyUri;
-                    uriArray.push(uri);
+                    if (uri) {
+                      // tests if URI is null. Will need to fix this on SQL
+                      uriArray.push(uri);
+                    } else {
+                      console.log("No URI for Track: " + tracks.name);
+                    }
+                  } // Tests if Array is over 100 items due to Spotify API limits
+                  if (uriArray.length < 100) {
+                    const createdPlaylistId = await createPlaylist(
+                      playlistName
+                    );
+                    console.log(
+                      `Created playlist: ${playlistName} - ${createdPlaylistId} \n Starting import`
+                    );
+                    addTrackToPlaylist(createdPlaylistId, uriArray);
+                    console.log("Completed import");
+                  } else {
+                    console.log(
+                      "STOPPING IMPORT - Playlist is over 100 items. WILL NEED TO FIX THIS"
+                    );
                   }
-                  console.log("Completed import");
-
-                  addTrackToPlaylist(createdPlaylistId, uriArray);
                 }}
               >
                 Import Playlist
               </button>
               <button
                 onClick={async () => {
-                  const createdPlaylistId = await createPlaylist(playlistName);
+                  // const createdPlaylistId = await createPlaylist(playlistName);
+                  // console.log(`Created playlist: ${playlistName} - ${createdPlaylistId} \n Starting import`);
+                  const uriArray: string[] = [];
+                  const playlist = playlistMap[playlistName];
+                  for (const tracks of playlist) {
+                    const uri = tracks.spotifyUri;
+                    if (uri) {
+                      // tests if URI is null. Will need to fix this on SQL
+                      uriArray.push(uri);
+                    } else {
+                      console.log("No URI for Track: " + tracks.name);
+                    }
+                  } // Tests if Array is over 100 items due to Spotify API limits
+                  if (uriArray.length < 100) {
+                    // addTrackToPlaylist(createdPlaylistId, uriArray);
+                    console.log("Completed import");
+                  } else {
+                    console.log(uriArray);
+                    console.log(
+                      "STOPPING IMPORT - Playlist is over 100 items. WILL NEED TO FIX THIS"
+                    );
+                  }
                 }}
               >
-                Create Playlist
+                TEST Playlist
               </button>
             </li>
           )}
