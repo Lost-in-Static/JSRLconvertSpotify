@@ -45,3 +45,11 @@ export const createPlaylist = async (name: string): Promise<any> => {
   });
   return response.data.id;
 };
+
+export const getSpotifyPlayLists = async () => {
+  const playlists = await getPlaylists();
+  console.log(playlists);
+  const playlistArray: string[] = [];
+  playlists.forEach((playlist) => playlistArray.push(playlist.name));
+  return playlistArray;
+};
