@@ -4,6 +4,7 @@ import JSRLMap from "../playlistMap.json";
 import {
   addTrackToPlaylist,
   createPlaylist,
+  getSpotifyPlayLists,
 } from "../services/spotify-service";
 
 export const JSRLiveImport: Component = () => {
@@ -20,6 +21,7 @@ export const JSRLiveImport: Component = () => {
                 onClick={async () => {
                   const uriArray: string[] = [];
                   const playlist = playlistMap[playlistName];
+                  const userPlaylists = getSpotifyPlayLists();
                   for (const tracks of playlist) {
                     const uri = tracks.spotifyUri;
                     if (uri) {
@@ -29,15 +31,20 @@ export const JSRLiveImport: Component = () => {
                       console.log("No URI for Track: " + tracks.name);
                     }
                   } // Tests if Array is over 100 items due to Spotify API limits
-                  if (uriArray.length < 100) {
+                  if (
+                    uriArray.length < 100 &&
+                    !(await userPlaylists).includes(playlist.name)
+                  ) {
                     const createdPlaylistId = await createPlaylist(
                       playlistName
                     );
                     console.log(
                       `Created playlist: ${playlistName} - ${createdPlaylistId} \n Starting import`
                     );
-                    addTrackToPlaylist(createdPlaylistId, uriArray);
+                    addTrackToPlaylist(createdPlaylistId, uriArray); //await??
                     console.log("Completed import");
+                  } else if (!(await userPlaylists).includes(playlist.name)) {
+                    console.log(`${playlist.name} already exists.`); // Need to build logic to just add missing tracks
                   } else {
                     console.log(
                       "STOPPING IMPORT - Playlist is over 100 items. WILL NEED TO FIX THIS"
@@ -51,6 +58,7 @@ export const JSRLiveImport: Component = () => {
                 onClick={async () => {
                   const uriArray: string[] = [];
                   const playlist = playlistMap[playlistName];
+                  const userPlaylists = getSpotifyPlayLists();
                   for (const tracks of playlist) {
                     const uri = tracks.spotifyUri;
                     if (uri) {
@@ -59,8 +67,12 @@ export const JSRLiveImport: Component = () => {
                       console.log("No URI for Track: " + tracks.name);
                     }
                   } // Tests if Array is over 100 items due to Spotify API limits
-                  if (uriArray.length < 100) {
+                  if (
+                    uriArray.length < 100 &&
+                    !(await userPlaylists).includes(playlist.name)
+                  ) {
                     // addTrackToPlaylist(createdPlaylistId, uriArray);
+                    console.log("Playlist already exists, aborting");
                     console.log("Completed import");
                   } else {
                     console.log(uriArray);
